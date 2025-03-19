@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "description": "Day Old Chicks",
+      "unitPrice": 2500
+    },
+    {
+      "description": "Starter Feed (50kg)",
+      "unitPrice": 65000
+    },
+    {
+      "description": "Grower Feed (50kg)",
+      "unitPrice": 60000
+    },
+    {
+      "description": "Layer Feed (50kg)",
+      "unitPrice": 62000
+    },
+    {
+      "description": "Broiler Feed (50kg)",
+      "unitPrice": 68000
+    },
+    {
+      "description": "Vaccination Service",
+      "unitPrice": 500
+    }
+  ]
+} 
