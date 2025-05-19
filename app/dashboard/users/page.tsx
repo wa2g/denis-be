@@ -9,7 +9,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: 'ADMIN' | 'ORDER_MANAGER' | 'ACCOUNTANT' | 'CEO' | 'MANAGER' | 'EXTENSION_OFFICER' | 'MARKETING_OFFICER';
+  role: 'ADMIN' | 'ORDER_MANAGER' | 'ACCOUNTANT' | 'CEO' | 'MANAGER' | 'EXTENSION_OFFICER' | 'MARKETING_OFFICER' | 'CUSTOMER';
   center: 'KAHAMA' | 'SHINYANGA' | 'MAGANZO' | null;
   isActive: boolean;
 }
@@ -538,6 +538,7 @@ export default function UserManagement() {
                     <option value="ACCOUNTANT">Accountant</option>
                     <option value="CEO">CEO</option>
                     <option value="MANAGER">Manager</option>
+                    <option value="CUSTOMER">Customer</option>
                   </select>
                 </div>
                 <div>
@@ -705,6 +706,7 @@ export default function UserManagement() {
                     <option value="ACCOUNTANT">Accountant</option>
                     <option value="CEO">CEO</option>
                     <option value="MANAGER">Manager</option>
+                    <option value="CUSTOMER">Customer</option>
                   </select>
                 </div>
                 <div>
