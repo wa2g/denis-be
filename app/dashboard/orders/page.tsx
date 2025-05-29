@@ -39,6 +39,7 @@ interface Order {
   accountantApproved?: boolean;
   managerApproved?: boolean;
   invoices: { id: string }[];
+  orderManagerId: string;
 }
 
 interface OrderDetails extends Order {
@@ -74,7 +75,18 @@ export default function OrdersPage() {
       if (!token) {
         throw new Error('No authentication token found');
       }
-      const response = await fetch(`${process.env.BASE_URL}/orders/`,{
+
+      // Get user data from localStorage
+      const userString = localStorage.getItem('user');
+      const user = userString ? JSON.parse(userString) : null;
+      
+      console.log('Current user:', user); // Debug log
+      
+      // Use the main orders endpoint for all users
+      const url = `${process.env.BASE_URL}/orders/`;
+      console.log('Fetching orders from:', url); // Debug log
+
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -82,10 +94,21 @@ export default function OrdersPage() {
       });
       
       if (handleUnauthorizedResponse(response)) return;
-      if (!response.ok) throw new Error('Failed to fetch orders token expired');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        console.error('Error response:', errorData); // Debug log
+        throw new Error(errorData?.message || 'Failed to fetch orders');
+      }
       
       const data = await response.json();
-      setOrders(data);
+      console.log('Fetched orders:', data); // Debug log
+
+      // If user is a customer, filter orders to show only their orders
+      const filteredOrders = user?.role === 'CUSTOMER' 
+        ? data.filter((order: Order) => order.orderManagerId === user.id)
+        : data;
+
+      setOrders(filteredOrders);
     } catch (error) {
       console.error('Error fetching orders:', error);
     } finally {

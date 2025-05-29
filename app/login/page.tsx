@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-type UserRole = 'ORDER_MANAGER' | 'ACCOUNTANT' | 'MANAGER' | 'CEO' | 'ADMIN';
+type UserRole = 'ORDER_MANAGER' | 'ACCOUNTANT' | 'MANAGER' | 'CEO' | 'ADMIN' | 'CUSTOMER';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -92,8 +92,10 @@ function LoginPage() {
             const user = {
               ...data.user,
               token: data.access_token,
-              role: roleData.role
+              role: roleData.role.toUpperCase()
             };
+
+            console.log('Setting user data:', user);
 
             // Set cookies with proper attributes
             document.cookie = `token=${data.access_token}; path=/; secure; samesite=strict`;
@@ -107,10 +109,12 @@ function LoginPage() {
               'ACCOUNTANT': '/dashboard/finance',
               'MANAGER': '/dashboard/management',
               'CEO': '/dashboard/reports',
-              'ADMIN': '/dashboard/admin'
+              'ADMIN': '/dashboard/admin',
+              'CUSTOMER': '/dashboard/orders'
             };
 
-            const defaultPath = roleRedirects[roleData.role as UserRole] || '/dashboard';
+            const defaultPath = roleRedirects[roleData.role.toUpperCase() as UserRole] || '/dashboard';
+            console.log('Redirecting to:', defaultPath);
             router.push(defaultPath);
           } catch (roleError) {
             console.error('Role fetch error:', roleError);
@@ -136,7 +140,8 @@ function LoginPage() {
       ACCOUNTANT: 'ACCOUNTANT',
       MANAGER: 'MANAGER',
       CEO: 'CEO',
-      ADMIN: 'ADMIN'
+      ADMIN: 'ADMIN',
+      CUSTOMER: 'CUSTOMER'
     };
     return roleTitles[roleId] || '';
   };

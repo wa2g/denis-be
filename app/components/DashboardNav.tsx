@@ -25,7 +25,7 @@ const navItems: NavItem[] = [
     path: '/dashboard/orders', 
     label: 'Orders',
     icon: <ClipboardDocumentListIcon className="w-5 h-5" />,
-    roles: ['ORDER_MANAGER', 'ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN']
+    roles: ['ORDER_MANAGER', 'ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN', 'CUSTOMER']
   },
   { 
     path: '/dashboard/inventory', 
@@ -110,6 +110,12 @@ const navItems: NavItem[] = [
     label: 'Settings',
     icon: <Cog6ToothIcon className="w-5 h-5" />,
     roles: ['ORDER_MANAGER', 'ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN']
+  },
+  { 
+    path: '/dashboard',
+    label: 'Dashboard',
+    icon: <ChartBarIcon className="w-5 h-5" />,
+    roles: ['CUSTOMER']
   }
 ];
 
@@ -125,7 +131,9 @@ export function DashboardNav() {
     }
   }, []);
 
-  const filteredNavItems = navItems.filter(item => item.roles.includes(userRole));
+  const filteredNavItems = userRole === 'CUSTOMER'
+    ? navItems.filter(item => ['Orders', 'Dashboard'].includes(item.label) && item.roles.includes('CUSTOMER'))
+    : navItems.filter(item => item.roles.includes(userRole));
 
   return (
     <nav className="mt-6 px-3">
