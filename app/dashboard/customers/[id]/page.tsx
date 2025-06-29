@@ -771,17 +771,49 @@ export default function CustomerDetails({ params }: { params: Promise<{ id: stri
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="font-medium mb-2 text-gray-900">Payment Details</h4>
                     <div className="space-y-2">
-                      <p className="text-sm text-gray-900">Status: {order.paymentStatus}</p>
-                      <p className="text-sm text-gray-900">Price per Chicken: {order.pricePerChicken}</p>
-                      <p className="text-sm text-gray-900">Total Price: {order.totalChickenPrice}</p>
-                      <p className="text-sm text-gray-900">Amount Paid: {order.amountPaid}</p>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium mb-2 text-gray-900">Delivery Information</h4>
-                    <div className="space-y-2">
-                      <p className="text-sm text-gray-900">Status: {order.receivingStatus}</p>
+                      <p className="text-sm text-gray-900">Status: {order.receivingStatus}
+                        {order.receivingStatus !== 'APPROVED' && (
+                          <button
+                            onClick={async () => {
+                              setLoading(true);
+                              try {
+                                const token = localStorage.getItem('token');
+                                let newStatus;
+                                if (order.receivingStatus === 'IN_PROGRESS') {
+                                  newStatus = 'APPROVED';
+                                } else if (order.receivingStatus === 'RECEIVED') {
+                                  newStatus = 'PENDING';
+                                } else {
+                                  newStatus = 'IN_PROGRESS';
+                                }
+                                
+                                const response = await fetch(`${process.env.BASE_URL}/chicken-orders/${order.id}/receiving-status`, {
+                                  method: 'PATCH',
+                                  headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({ receivingStatus: newStatus }),
+                                });
+                                if (!response.ok) throw new Error('Failed to update receiving status');
+                                await fetchCustomerDetails();
+                              } catch (error) {
+                                alert('Failed to update receiving status');
+                              } finally {
+                                setLoading(false);
+                              }
+                            }}
+                            className="ml-2 px-2 py-1 text-xs rounded bg-[#066b3a] text-white hover:bg-[#044d29] disabled:opacity-50"
+                            disabled={loading}
+                          >
+                            {loading ? 'Updating...' : 
+                              order.receivingStatus === 'IN_PROGRESS' ? 'Mark as Approved to ship to customer' :
+                              order.receivingStatus === 'RECEIVED' ? 'Mark as Pending' :
+                              'Mark as In Progress'
+                            }
+                          </button>
+                        )}
+                      </p>
                       <p className="text-sm text-gray-900">Date: {new Date(order.deliveryDate).toLocaleDateString()}</p>
                       <p className="text-sm text-gray-900">Location: {order.village}, {order.ward}</p>
                     </div>

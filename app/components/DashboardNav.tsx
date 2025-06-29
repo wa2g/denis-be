@@ -27,6 +27,18 @@ const navItems: NavItem[] = [
     icon: <ClipboardDocumentListIcon className="w-5 h-5" />,
     roles: ['ORDER_MANAGER', 'ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN', 'CUSTOMER']
   },
+  // {
+  //   path: '/dashboard/orders/pending',
+  //   label: 'Pending Orders',
+  //   icon: <ClipboardDocumentListIcon className="w-5 h-5" />,
+  //   roles: ['ORDER_MANAGER', 'ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN', 'CUSTOMER']
+  // },
+  // {
+  //   path: '/dashboard/orders/[orderNumber]',
+  //   label: 'Order Details',
+  //   icon: <ClipboardDocumentListIcon className="w-5 h-5" />,
+  //   roles: ['ORDER_MANAGER', 'ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN', 'CUSTOMER']
+  // },
   { 
     path: '/dashboard/inventory', 
     label: 'Inventory',
@@ -51,24 +63,24 @@ const navItems: NavItem[] = [
     icon: <CubeIcon className="w-5 h-5" />,
     roles: ['ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN']
   },
-  { 
-    path: '/dashboard/finance', 
-    label: 'Finance',
-    icon: <BanknotesIcon className="w-5 h-5" />,
-    roles: ['ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN']
-  },
+  // { 
+  //   path: '/dashboard/finance', 
+  //   label: 'Finance',
+  //   icon: <BanknotesIcon className="w-5 h-5" />,
+  //   roles: ['ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN']
+  // },
   { 
     path: '/dashboard/request-form', 
     label: 'Requests',
     icon: <DocumentTextIcon className="w-5 h-5" />,
     roles: ['ORDER_MANAGER', 'ACCOUNTANT', 'MANAGER', 'CEO', 'ADMIN']
   },
-  { 
-    path: '/dashboard/management', 
-    label: 'Management',
-    icon: <UserGroupIcon className="w-5 h-5" />,
-    roles: ['ADMIN']
-  },
+  // { 
+  //   path: '/dashboard/management', 
+  //   label: 'Management',
+  //   icon: <UserGroupIcon className="w-5 h-5" />,
+  //   roles: ['ADMIN']
+  // },
   { 
     path: '/dashboard/users', 
     label: 'Users',

@@ -106,10 +106,10 @@ function LoginPage() {
 
             const roleRedirects: Record<UserRole, string> = {
               'ORDER_MANAGER': '/dashboard/orders',
-              'ACCOUNTANT': '/dashboard/finance',
-              'MANAGER': '/dashboard/management',
-              'CEO': '/dashboard/reports',
-              'ADMIN': '/dashboard/admin',
+              'ACCOUNTANT': '/dashboard/finance/invoices',
+              'MANAGER': '/dashboard/orders',
+              'CEO': '/dashboard/finance/invoices',
+              'ADMIN': '/dashboard/users',
               'CUSTOMER': '/dashboard/orders'
             };
 

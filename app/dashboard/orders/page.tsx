@@ -213,11 +213,22 @@ export default function OrdersPage() {
   //   }
   // };
 
-  const handleApproveOrder = async (orderId: string, orderNumber: string) => {
+  const handleApproveOrder = async (orderId: string, orderNumber: string, currentStatus: string) => {
     try {
       const token = getAuthToken();
       if (!token) {
         throw new Error('No authentication token found');
+      }
+
+      // Determine next status
+      let nextStatus = '';
+      if (currentStatus === 'PENDING' && userRole === 'ACCOUNTANT') {
+        nextStatus = 'IN_PROGRESS';
+      } else if (currentStatus === 'IN_PROGRESS' && (userRole === 'MANAGER' || userRole === 'CEO')) {
+        nextStatus = 'APPROVED';
+      } else {
+        alert('You are not authorized to approve this order at this stage.');
+        return;
       }
 
       const response = await fetch(`${process.env.BASE_URL}/orders/${orderNumber}/status`, {
@@ -227,7 +238,7 @@ export default function OrdersPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          status: 'APPROVED',
+          status: nextStatus,
           reason: `Approved by ${userRole}`
         })
       });
@@ -246,17 +257,13 @@ export default function OrdersPage() {
         prevOrders.map(order => {
           if (order.id === orderId) {
             const updatedOrder = { ...order };
-            if (userRole === 'ACCOUNTANT') {
+            if (nextStatus === 'IN_PROGRESS') {
               updatedOrder.accountantApproved = true;
-            } else if (userRole === 'MANAGER') {
+              updatedOrder.status = 'IN_PROGRESS';
+            } else if (nextStatus === 'APPROVED') {
               updatedOrder.managerApproved = true;
-            }
-            
-            // If both approved, update status
-            if (updatedOrder.accountantApproved && updatedOrder.managerApproved) {
               updatedOrder.status = 'APPROVED';
             }
-            
             return updatedOrder;
           }
           return order;
@@ -533,12 +540,15 @@ export default function OrdersPage() {
                         </button>
                         
                         {/* Show approve/cancel buttons only for accountant and manager */}
-                        {(userRole === 'ACCOUNTANT' || userRole === 'MANAGER') && 
-                         order.status !== 'APPROVED' && 
-                         order.status !== 'CANCELLED' && (
+                        {(
+                          // Show to MANAGER or CEO if status is IN_PROGRESS
+                          ((order.status === 'IN_PROGRESS') && (userRole === 'MANAGER' || userRole === 'CEO')) ||
+                          // Show to ACCOUNTANT or MANAGER if status is PENDING
+                          ((order.status === 'PENDING') && (userRole === 'ACCOUNTANT' || userRole === 'MANAGER'))
+                        ) && (
                           <>
                             <button
-                              onClick={() => handleApproveOrder(order.id, order.orderNumber)}
+                              onClick={() => handleApproveOrder(order.id, order.orderNumber, order.status)}
                               className="inline-flex items-center px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors"
                             >
                               <CheckCircleIcon className="w-4 h-4 mr-1" />
@@ -803,4 +813,12 @@ export default function OrdersPage() {
       `}</style>
     </div>
   );
-} 
+}
+
+export type { Order };
+export const getAuthToken = () => {
+  const userCookie = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('token='));
+  return userCookie ? userCookie.split('=')[1] : null;
+}; 

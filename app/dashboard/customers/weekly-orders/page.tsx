@@ -94,11 +94,11 @@ export default function WeeklyOrders() {
     }));
   };
 
-  const fetchWeeklyOrders = async (startDate: string, endDate: string) => {
+  const fetchWeeklyOrders = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.BASE_URL}/customers/orders/weekly?startDate=${startDate}&endDate=${endDate}`, {
+      const response = await fetch(`${process.env.BASE_URL}/customers/orders/weekly`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -116,8 +116,8 @@ export default function WeeklyOrders() {
   };
 
   useEffect(() => {
-    fetchWeeklyOrders(dateRange.startDate, dateRange.endDate);
-  }, [dateRange]);
+    fetchWeeklyOrders();
+  }, []);
 
   const handleSubmitWeeklyOrders = async () => {
     try {
@@ -145,7 +145,7 @@ export default function WeeklyOrders() {
       }
       
       // Refresh orders after submission
-      await fetchWeeklyOrders(dateRange.startDate, dateRange.endDate);
+      await fetchWeeklyOrders();
       alert('Weekly orders submitted successfully!');
     } catch (error) {
       console.error('Error submitting weekly orders:', error);
@@ -244,7 +244,7 @@ export default function WeeklyOrders() {
             </div>
             <div className="w-full sm:w-auto self-end">
               <button
-                onClick={() => fetchWeeklyOrders(dateRange.startDate, dateRange.endDate)}
+                onClick={fetchWeeklyOrders}
                 className="w-full sm:w-auto px-4 py-2 bg-[#066b3a] text-white rounded-md hover:bg-[#044d29] transition-colors"
               >
                 Filter Orders

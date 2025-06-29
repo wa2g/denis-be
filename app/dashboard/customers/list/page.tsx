@@ -64,6 +64,7 @@ interface Sale {
 interface Customer {
   id: string;
   name: string;
+  email: string;
   phone: string;
   sex: 'MALE' | 'FEMALE';
   center: string;
@@ -119,6 +120,7 @@ type FeedType =
 interface NewCustomer {
   name: string;
   phone: string;
+  email: string;
   sex: 'MALE' | 'FEMALE';
   farmingPlace: string;
   village: string;
@@ -263,6 +265,7 @@ function CustomerListContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCustomer, setNewCustomer] = useState<NewCustomer>({
     name: '',
+    email: '',
     phone: '',
     sex: 'MALE',
     farmingPlace: '',
@@ -417,6 +420,7 @@ function CustomerListContent() {
       setIsModalOpen(false);
       setNewCustomer({
         name: '',
+        email: '',
         phone: '',
         sex: 'MALE',
         farmingPlace: '',
@@ -602,6 +606,17 @@ function CustomerListContent() {
                     id="name"
                     value={newCustomer.name}
                     onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
+                    className="mt-1 block w-full rounded-md border-2 border-gray-400 shadow-sm focus:border-[#066b3a] focus:ring-[#066b3a] text-base py-3 px-4"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-900">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={newCustomer.email}
+                    onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
                     className="mt-1 block w-full rounded-md border-2 border-gray-400 shadow-sm focus:border-[#066b3a] focus:ring-[#066b3a] text-base py-3 px-4"
                     required
                   />
